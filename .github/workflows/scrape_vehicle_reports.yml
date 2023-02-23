@@ -4,8 +4,8 @@ on:
   push:
   workflow_dispatch:
   schedule:
-    # triggered monthy, every 23rd of month at 7:45 UTC 
-    - cron: '55 7 23 * *' 
+    # triggered every 10 minutes
+    - cron: '10 * * * *' 
 
 jobs:
   scheduled:
@@ -15,7 +15,7 @@ jobs:
       uses: actions/checkout@main
     - name: Fetch latest data
       run: |-
-        curl https://nyc.gov/site/nypd/stats/reports-analysis/vehicle-stop-reports.page | jq . > vehicle_stops.json
+        curl https://nyc.gov/site/nypd/stats/reports-analysis/vehicle-stop-reports.page | tidy . > vehicle_stops.html
     - name: Commit and push if it changed
       run: |-
         git config user.name "Automated"
