@@ -5,14 +5,14 @@ on:
   workflow_dispatch:
   schedule:
     # triggered monthy, every 23rd of month at 7:45 UTC 
-    - cron: '45 7 23 * *' 
+    - cron: '55 7 23 * *' 
 
 jobs:
   scheduled:
     runs-on: ubuntu-latest
     steps:
     - name: Check out this repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@main
     - name: Fetch latest data
       run: |-
         curl https://nyc.gov/site/nypd/stats/reports-analysis/vehicle-stop-reports.page | jq . > vehicle_stops.json
