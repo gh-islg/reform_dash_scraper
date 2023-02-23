@@ -1,0 +1,26 @@
+name: Scrape latest vehicle reports data
+
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    # triggered monthy, every 23rd of month at 7:45 UTC 
+    - cron: '45 7 23 * *' 
+
+jobs:
+  scheduled:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out this repo
+      uses: actions/checkout@v2
+    - name: Fetch latest data
+      run: |-
+        curl https://nyc.gov/site/nypd/stats/reports-analysis/vehicle-stop-reports.page | jq . > vehicle_stops.json
+    - name: Commit and push if it changed
+      run: |-
+        git config user.name "Automated"
+        git config user.email "actions@users.noreply.github.com"
+        git add -A
+        timestamp=$(date -u)
+        git commit -m "Latest data: ${timestamp}" || exit 0
+        git push
