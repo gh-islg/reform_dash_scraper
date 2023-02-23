@@ -15,7 +15,7 @@ jobs:
       uses: actions/checkout@main
     - name: Fetch latest data
       run: |-
-        curl https://nyc.gov/site/nypd/stats/reports-analysis/vehicle-stop-reports.page | tidy . > vehicle_stops.html
+        curl https://nyc.gov/site/nypd/stats/reports-analysis/vehicle-stop-reports.page > vehicle_stops.html
     - name: Commit and push if it changed
       run: |-
         git config user.name "Automated"
