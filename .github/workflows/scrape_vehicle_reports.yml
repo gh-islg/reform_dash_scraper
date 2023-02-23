@@ -4,8 +4,8 @@ on:
   push:
   workflow_dispatch:
   schedule:
-    # triggered every 10 minutes
-    - cron: '10 * * * *' 
+    # triggered every 1st of every month at 11am UTC.
+    - cron: '0 11 1 * *' 
 
 jobs:
   scheduled:
