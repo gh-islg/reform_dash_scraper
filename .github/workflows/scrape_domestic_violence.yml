@@ -1,11 +1,11 @@
-name: Scrape latest vehicle reports data
+name: Scrape latest NYPD domestic violence reports
 
 on:
   push:
   workflow_dispatch:
   schedule:
     # triggered every 1st of every month at 11am UTC.
-    # but data is updated quarterly
+    # but data is updated annually/monthly/quarterly??
     - cron: '0 11 1 * *' 
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@main
     - name: Fetch latest data
       run: |-
-        curl https://nyc.gov/site/nypd/stats/reports-analysis/vehicle-stop-reports.page > vehicle_stops.html
+        curl https://www.nyc.gov/site/nypd/stats/reports-analysis/domestic-violence.page > domestic_violence.html
     - name: Commit and push if it changed
       run: |-
         git config user.name "Automated"
