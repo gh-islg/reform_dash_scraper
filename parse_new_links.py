@@ -44,7 +44,18 @@ def get_specific_links(html_doc, metric, init = True):
     else:
         links = get_links_from_html(html_doc, init = False)
 
-    if metric == 'vehicle_stops':
+    if metric == 'homicides':
+        urls, texts = [], []
+        for link in links:
+            try:
+                url = link.get('href')
+                if 'assets/nypd/downloads/excel/analysis_and_planning/supplementary-homicide/' in url:
+                    urls.append(url)
+                    texts.append(link.get_text())
+                    print(url)
+            except:
+                pass
+    elif metric == 'vehicle_stops':
         urls, texts = [], []
         for link in links:
             try:
@@ -63,7 +74,7 @@ def get_specific_links(html_doc, metric, init = True):
     pd_results = pd.DataFrame(results)
     return pd_results
 
-
+#%%
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--path_to_html", 
@@ -78,5 +89,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     metric_links = get_specific_links(args.metric, init = args.init)
 
-    metric_links.to_csv(f'results{args.metric}_links.csv')
+    metric_links.to_csv(f'results/{args.metric}_links.csv')
 #%%
