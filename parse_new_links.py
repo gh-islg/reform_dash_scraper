@@ -1,11 +1,12 @@
 #!/usr/bin/env reform
+#%%
 from bs4 import BeautifulSoup
 import requests
 import argparse
 import git 
 import pandas as pd
 import re
-
+#%%
 def get_commit_history(data_path):
     '''
     Get the latest commit diff of a file.
@@ -78,4 +79,4 @@ if __name__ == "__main__":
     metric_links = get_specific_links(args.metric, init = args.init)
 
     metric_links.to_csv(f'results{args.metric}_links.csv')
-
+#%%
