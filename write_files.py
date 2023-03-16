@@ -39,23 +39,30 @@ def write_box(filepath, data_type, folder_name, client):
     # get the subfolder ID
     items = client.folder(folder_id=folder_id).get_items()
     for item in items:
-        print(f'{item.type.capitalize()} {item.id} is named "{item.name}"')
+        #print(f'{item.type.capitalize()} {item.id} is named "{item.name}"')
         if item.name == data_type:
             subfolder_id = item.id
 
     # check if file already exists
     filename = filepath.split('/')[-1]
-    check_file = client.search().query(query=filename, limit=1, ancestor_folder_ids=[subfolder_id], type='file')    
+    filename = filename.split('.')[0]
+    exact_filename = f"\"{filename}\""
+    check_file = client.search().query(query=exact_filename, 
+                                       content_types = ['name'], 
+                                       limit=1, 
+                                       ancestor_folder_ids=[subfolder_id], 
+                                       type='file')    
     file_id = None
-    for item in check_file:
-        file_id = item.id
+    for i in check_file:
+        print(f'The item ID is {i.id} and the item name is {i.name}')
+        file_id = i.id
 
     # either update or upload file
     if file_id:
         updated_file = client.file(file_id).update_contents(filepath)
         print('File "{0}" has been updated'.format(updated_file.name))
     else:
-        new_file = client.folder(subfolder_id).upload(file_path = filepath, file_name = filename)
+        new_file = client.folder(subfolder_id).upload(file_path = filepath, file_name = f"{filename}.xlsx")
         print('File "{0}" uploaded to Box with file ID {1}'.format(new_file.name, new_file.id))
 
 def download_report(metric, agency, client):
@@ -72,9 +79,10 @@ def download_report(metric, agency, client):
                   data_type='Raw',
                   folder_name=agency, 
                   client=client)
-
+# %%
 
 if __name__ == "__main__":
     client = auth_box()
-    download_report(metric='ccrb', agency='CCRB', client=client)
-    download_report(metric='nypd', agency='NYPD', client=client)
+    download_report(metric='vehicle_stops', agency='NYPD', client=client)
+    download_report(metric='homicides', agency='NYPD', client=client)
+# %%
