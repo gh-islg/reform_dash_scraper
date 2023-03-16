@@ -1,7 +1,6 @@
 name: Scrape latest data
 
 on:
-  push:
   workflow_dispatch:
   schedule:
     # triggered every 1st of every month at 11am UTC.
