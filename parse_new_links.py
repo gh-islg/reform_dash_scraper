@@ -89,5 +89,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     metric_links = get_specific_links(args.metric, init = args.init)
 
+    if metric_links.text.str.contains(':').any():
+        metric_links['text'] = metric_links['text'].str.replace(':', ' -')
     metric_links.to_csv(f'results/{args.metric}_links.csv')
+    
 #%%
