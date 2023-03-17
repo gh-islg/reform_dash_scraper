@@ -1,0 +1,9 @@
+metric,url,text,data_type
+sqf,https://nyc.gov/assets/nypd/downloads/excel/analysis_and_planning/stop-question-frisk/sqf-2021.xlsx,SQF 2021 Excel file,xlsx
+sqf,https://nyc.gov/assets/nypd/downloads/excel/analysis_and_planning/stop-question-frisk/sqf-2020.xlsx,SQF 2020 Excel file,xlsx
+sqf,https://nyc.gov/assets/nypd/downloads/excel/analysis_and_planning/stop-question-frisk/sqf-2019.xlsx,SQF 2019 Excel file,xlsx
+sqf,https://nyc.gov/assets/nypd/downloads/excel/analysis_and_planning/stop-question-frisk/sqf-2018.xlsx,SQF 2018 Excel file,xlsx
+sqf,https://nyc.gov/assets/nypd/downloads/excel/analysis_and_planning/stop-question-frisk/csi-2947-2019-sqf-cy2017-updated1-9-2020.xlsx,SQF 2017 Excel file,xlsx
+sqf,https://nyc.gov/assets/nypd/downloads/excel/analysis_and_planning/stop-question-frisk/sqf-2016.csv,SQF 2016 CSV file,csv
+sqf,https://nyc.gov/assets/nypd/downloads/excel/analysis_and_planning/stop-question-frisk/sqf-2015.csv,SQF 2015 CSV file,csv
+sqf,https://nyc.gov/assets/nypd/downloads/excel/analysis_and_planning/stop-question-frisk/2019-sqf-file-spec.xlsx,"SQF The most recent NYPD Stop, Question, and Frisk database file specifications",xlsx

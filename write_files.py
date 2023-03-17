@@ -13,12 +13,12 @@ def auth_box():
     Accessing Box API
     '''
     auth = JWTAuth(
-    client_id=cfg['clientID'],
-    client_secret=cfg['clientSecret'],
-    enterprise_id=cfg['enterpriseID'],
-    jwt_key_id=cfg['publicKeyID'],
-    rsa_private_key_data=cfg['privateKey'],
-    rsa_private_key_passphrase=cfg['passphrase']
+        client_id=cfg['clientID'],
+        client_secret=cfg['clientSecret'],
+        enterprise_id=cfg['enterpriseID'],
+        jwt_key_id=cfg['publicKeyID'],
+        rsa_private_key_data=cfg['privateKey'],
+        rsa_private_key_passphrase=cfg['passphrase']
     )
     access_token = auth.authenticate_instance()
     client = Client(auth)
@@ -46,6 +46,7 @@ def write_box(filepath, data_type, folder_name, client):
     # check if file already exists
     filename = filepath.split('/')[-1]
     filename = filename.split('.')[0]
+    filetype = filepath.split('.')[-1]
     exact_filename = f"\"{filename}\""
     check_file = client.search().query(query=exact_filename, 
                                        content_types = ['name'], 
@@ -62,7 +63,7 @@ def write_box(filepath, data_type, folder_name, client):
         updated_file = client.file(file_id).update_contents(filepath)
         print('File "{0}" has been updated'.format(updated_file.name))
     else:
-        new_file = client.folder(subfolder_id).upload(file_path = filepath, file_name = f"{filename}.xlsx")
+        new_file = client.folder(subfolder_id).upload(file_path = filepath, file_name = f"{filename}.{filetype}")
         print('File "{0}" uploaded to Box with file ID {1}'.format(new_file.name, new_file.id))
 
 def download_report(metric, agency, client):
@@ -73,9 +74,9 @@ def download_report(metric, agency, client):
     for u in range(df.shape[0]):
         print(df.text[u])
         report = requests.get(df.url[u])
-        with open(f'tmp/{df.text[u]}.xlsx', 'wb') as outfile:
+        with open(f'tmp/{df.text[u]}.{df.data_type[u]}', 'wb') as outfile:
             outfile.write(report.content)
-        write_box(filepath=f'tmp/{df.text[u]}.xlsx', 
+        write_box(filepath=f'tmp/{df.text[u]}.{df.data_type[u]}', 
                   data_type='Raw',
                   folder_name=agency, 
                   client=client)
@@ -85,4 +86,5 @@ if __name__ == "__main__":
     client = auth_box()
     download_report(metric='vehicle_stops', agency='NYPD', client=client)
     download_report(metric='homicides', agency='NYPD', client=client)
+    download_report(metric='sqf', agency='NYPD', client=client)
 # %%

@@ -17,6 +17,25 @@ def get_commit_history(data_path):
     diffs = repo.git.diff(latest_commits[0], latest_commits[1], data_path)
     return diffs
 
+def return_metric_params(metric):
+    '''
+    Storing paths to the html documents and url links for each metric.
+    '''
+    gh_url = 'https://raw.githubusercontent.com/gh-islg/reform_dash_scraper/main/'
+    if metric == 'homicides':
+        html_doc = f'{gh_url}homicides.html'
+        link_url = 'assets/nypd/downloads/excel/analysis_and_planning/supplementary-homicide/'
+    elif metric == 'vehicle_stops':
+        html_doc =  f'{gh_url}vehicle_stops.html'
+        link_url = 'assets/nypd/downloads/excel/analysis_and_planning/vehcile-encounter-reports/' 
+    elif metric == 'domestic_violence':
+        html_doc =  f'{gh_url}domestic_violence.html'
+    elif metric == 'sqf':
+        html_doc =  f'{gh_url}sqf.html'
+        # 2015-2021 (pre 2015 are zip files)
+        link_url =  "/assets/nypd/downloads/excel/analysis_and_planning/stop-question-frisk/"
+    return [html_doc, link_url]
+
 def get_links_from_html(html_doc, init = True):
     '''
     If we're initializing for the first times, get all links from a html document.
@@ -35,44 +54,64 @@ def get_links_from_html(html_doc, init = True):
         links = soup.find_all('a')
     return links
 
-def get_specific_links(html_doc, metric, init = True):
+def search_links(metric, link_url, html_links):
     '''
-    Get the links depending on the metric.
+    Search across all links on page for the relevant link depending on metric.
     '''
-    if init == True:
-        links = get_links_from_html(html_doc, init = True)
-    else:
-        links = get_links_from_html(html_doc, init = False)
-
-    if metric == 'homicides':
-        urls, texts = [], []
-        for link in links:
-            try:
-                url = link.get('href')
-                if 'assets/nypd/downloads/excel/analysis_and_planning/supplementary-homicide/' in url:
-                    urls.append(url)
-                    texts.append(link.get_text())
-                    print(url)
-            except:
-                pass
-    elif metric == 'vehicle_stops':
-        urls, texts = [], []
-        for link in links:
-            try:
-                url = link.get('href')
-                if 'assets/nypd/downloads/excel/analysis_and_planning/vehcile-encounter-reports/' in url:
-                    urls.append(url)
-                    texts.append(link.get_text())
-                    print(url)
-            except:
-                pass
+    urls, texts = [], []
+    for link in html_links:
+        try:
+            url = link.get('href')
+            if link_url in url:
+                urls.append(url)
+                texts.append(link.get_text())
+                print(url)
+        except:
+            pass
     results = {
         'metric': metric,
         'url': [f"https://nyc.gov{i}" for i in urls],
         'text': texts
     }
-    pd_results = pd.DataFrame(results)
-    return pd_results
+    return results
+
+def get_specific_links(metric, init = True):
+    '''
+    Get the links depending on the metric.
+    '''
+    metric_params = return_metric_params(metric = metric)
+    html_doc = metric_params[0]
+    link_url = metric_params[1]
+
+    if init == True:
+        links = get_links_from_html(html_doc, init = True)
+    else:
+        links = get_links_from_html(html_doc, init = False)
+
+    results = search_links(metric = metric,
+                           link_url = link_url, 
+                           html_links = links)
+    return results
+
+def clean_dataframe(data):
+    '''
+    Create dataframe, some clean up, and add data_type column.
+    '''
+    pd_results = pd.DataFrame(data)
+    if data.text.str.contains(':').any():
+        data['text'] = data['text'].str.replace(':', ' -')
+
+    # SQF has a different naming convention
+    if data.metric.str.contains('sqf').any():
+        data['text'] = "SQF " + data['text']
+
+     # SQF has a different naming convention
+    file = data['url'].str.split('/').str[-1]
+    data['data_type'] = file.str.split('.').str[-1]
+    clean_df = data
+
+    # output to csv
+    return clean_df
 
 #%%
 if __name__ == "__main__":
@@ -88,9 +127,7 @@ if __name__ == "__main__":
                         type=bool)
     args = parser.parse_args()
     metric_links = get_specific_links(args.metric, init = args.init)
+    clean_results = clean_dataframe(data = metric_links)
 
-    if metric_links.text.str.contains(':').any():
-        metric_links['text'] = metric_links['text'].str.replace(':', ' -')
-    metric_links.to_csv(f'results/{args.metric}_links.csv')
-    
+    clean_results.to_csv(f'results/{args.metric}_links.csv', index = False) 
 #%%
