@@ -15,6 +15,7 @@ jobs:
       uses: actions/checkout@main
     - name: Fetch latest data
       run: |-
+        curl https://www.nyc.gov/site/nypd/stats/reports-analysis/transit-bus.page > transit.html
         curl https://www.nyc.gov/site/nypd/stats/reports-analysis/homicide.page > homicide.html
         curl https://www.nyc.gov/site/nypd/stats/reports-analysis/stopfrisk.page > sqf.html
         curl https://www.nyc.gov/site/nypd/stats/reports-analysis/domestic-violence.page > domestic_violence.html
