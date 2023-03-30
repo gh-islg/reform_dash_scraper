@@ -88,3 +88,8 @@ if __name__ == "__main__":
     download_report(metric='homicides', agency='NYPD', client=client)
     download_report(metric='sqf', agency='NYPD', client=client)
 # %%
+
+"NYPD Complaint Data (Historic) and YTD: https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i      and https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-Year-To-Date-/5uac-w243
+
+Also see: https://www.nyc.gov/site/nypd/stats/crime-statistics/historical.page and https://www.nyc.gov/site/nypd/stats/crime-statistics/citywide-crime-stats.page
+https://www.nyc.gov/site/nypd/stats/reports-analysis/homicide.page"

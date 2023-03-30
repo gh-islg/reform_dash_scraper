@@ -116,9 +116,6 @@ def clean_dataframe(data):
 #%%
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--path_to_html", 
-                        help="The repo path to the html document. E.g., https://raw.githubusercontent.com/gh-islg/reform_dash_scraper/main/vehicle_stops.html",
-                        type=str)
     parser.add_argument("--metric", 
                         help="The shortform name of the metric.",
                         type=str)
