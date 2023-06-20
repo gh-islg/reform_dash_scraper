@@ -19,7 +19,7 @@ jobs:
         curl https://www.nyc.gov/site/nypd/stats/reports-analysis/homicide.page > homicide.html
         curl https://www.nyc.gov/site/nypd/stats/reports-analysis/stopfrisk.page > sqf.html
         curl https://www.nyc.gov/site/nypd/stats/reports-analysis/domestic-violence.page > domestic_violence.html
-        curl https://nyc.gov/site/nypd/stats/reports-analysis/vehicle-stop-reports.page > vehicle_stops.html
+        curl https://www.nyc.gov/site/nypd/stats/reports-analysis/vehicle-stop-reports.page > vehicle_stops.html
     - name: Commit and push if it changed
       run: |-
         git config user.name "Automated"
